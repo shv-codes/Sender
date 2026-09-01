@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Browser Text Relay</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <header>
+      <h1>Text Relay</h1>
+      <div id="connection-indicator" class="indicator connecting" title="Connecting..."></div>
+    </header>
+
+    <main>
+      <!-- IDLE / START VIEW -->
+      <section id="view-idle" class="view active">
+        <div class="card">
+          <h2>Host a room</h2>
+          <p class="text-muted">Generate a code to securely share text.</p>
+          <button id="btn-create-room" class="btn-primary">Create Room</button>
+        </div>
+        
+        <div class="divider"><span>OR</span></div>
+        
+        <div class="card">
+          <h2>Join a room</h2>
+          <p class="text-muted">Enter a 6-digit code from the host.</p>
+          <div class="input-group">
+            <input type="text" id="input-join-code" placeholder="000000" maxlength="6" autocomplete="off" />
+            <button id="btn-join-room" class="btn-secondary">Join</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CREATING VIEW -->
+      <section id="view-creating" class="view text-center">
+        <div class="spinner" style="margin-top: 60px;"></div>
+        <h2>Creating room...</h2>
+        <p class="text-muted">Generating secure tokens</p>
+      </section>
+
+      <!-- WAITING FOR RECEIVER VIEW (Sender) -->
+      <section id="view-waiting" class="view text-center">
+        <h2>Scan to Join</h2>
+        <div class="qr-container">
+          <img id="qrImage" alt="QR Code for joining" />
+        </div>
+        <p class="text-muted">Or enter this code:</p>
+        <div class="code-display" id="display-room-code">------</div>
+        <p class="expiry-text" id="display-expiry"></p>
+        <div class="pulse-text">Waiting for receiver to connect...</div>
+      </section>
+
+      <!-- CONNECTED VIEW (Sender & Receiver) -->
+      <section id="view-connected" class="view">
+        <div class="success-banner">
+          <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+          Peer connected securely
+        </div>
+        
+        <!-- Sender specifics -->
+        <div id="sender-controls" style="display: none;">
+          <textarea id="input-send-text" placeholder="Type or paste text to send..."></textarea>
+          <div class="action-row">
+            <button id="btn-send-text" class="btn-primary">Send Text</button>
+            <span id="send-feedback" class="feedback success">Sent! ✓</span>
+          </div>
+        </div>
+
+        <!-- Receiver specifics -->
+        <div id="receiver-controls" style="display: none;">
+          <div id="waiting-for-text" class="text-center" style="margin-top: 40px;">
+            <div class="spinner small"></div>
+            <p class="text-muted">Waiting for text from sender...</p>
+          </div>
+          <div id="received-text-container" style="display: none;">
+            <textarea id="display-received-text" readonly></textarea>
+            <div class="action-row">
+              <button id="btn-copy-text" class="btn-primary">Copy to Clipboard</button>
+              <span id="copy-feedback" class="feedback success">Copied! ✓</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ERROR / DISCONNECTED VIEWS -->
+      <section id="view-error" class="view text-center">
+        <div class="error-icon" style="margin-top: 40px;">⚠️</div>
+        <h2 id="error-title" class="text-danger">Error</h2>
+        <p id="error-message" class="text-muted"></p>
+        <button id="btn-reset-error" class="btn-secondary mt-4">Back to Home</button>
+      </section>
+    </main>
+
+    <script src="../../dist/popup/popup.js"></script>
+  </body>
+</html>
