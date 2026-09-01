@@ -5,8 +5,9 @@ import { roomManager } from './rooms.js';
 import { CLEANUP_INTERVAL_MS, RATE_LIMITS } from './config.js';
 import { RateLimiter } from './rate-limit.js';
 
-const PORT = 8080;
-const wss = new WebSocketServer({ port: PORT });
+const PORT = parseInt(process.env.PORT || '8080', 10);
+const HOST = '0.0.0.0';
+const wss = new WebSocketServer({ port: PORT, host: HOST });
 
 const joinFailureLimiter = new RateLimiter(RATE_LIMITS.JOIN_FAILURES);
 const roomCreationLimiter = new RateLimiter(RATE_LIMITS.ROOM_CREATION);
@@ -168,4 +169,4 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
   });
 });
 
-console.log(`Relay server started on ws://localhost:${PORT}`);
+console.log(`Relay server started on ws://${HOST}:${PORT}`);
