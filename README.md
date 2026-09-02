@@ -1,4 +1,4 @@
-# Browser Text Relay
+# TextCarry
 
 A minimal browser extension that lets one browser send text to another browser using a temporary room.
 
